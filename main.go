@@ -72,7 +72,7 @@ func saveAsExcel(matrix [][]uint32, writer *os.File) {
 	for y := 0; y < len(matrix[0]); y++ {
 		excelRow := excelIndex(0, y) + ":" + excelIndex(len(matrix), y)
 		err := f.SetConditionalFormat(sheet, excelRow,
-			`[{"type":"2_color_scale","criteria":"=","min_type":"min","max_type":"max","min_color":"#000000","max_color":"`+maxColors[y%3]+`"}]`)
+			`[{"type":"2_color_scale","criteria":"=","min_type":"num","min_value":"0","max_type":"num","max_value":"255","min_color":"#000000","max_color":"`+maxColors[y%3]+`"}]`)
 		if err != nil {
 			log.Fatalf("SetConditionalFormat: %v", err)
 		}
