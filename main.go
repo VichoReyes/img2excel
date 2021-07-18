@@ -1,7 +1,7 @@
 package main
 
 import (
-	"encoding/csv"
+	"github.com/360EntSecGroup-Skylar/excelize/v2"
 	"image"
 	"image/png"
 	"log"
@@ -33,7 +33,7 @@ func excelIndex(x, y int) string {
 
 func main() {
 	if len(os.Args) != 3 {
-		log.Fatalln("USAGE: img2excel <inputFile.png> <outputFile.csv>")
+		log.Fatalln("USAGE: img2excel <inputFile.png> <outputFile.xlsx>")
 	}
 	imgFilePath := os.Args[1]
 	imageReader, err := os.Open(imgFilePath)
@@ -45,31 +45,31 @@ func main() {
 		log.Fatal(err)
 	}
 
-	csvFilePath := os.Args[2]
-	writer, err := os.Create(csvFilePath)
+	excelFilePath := os.Args[2]
+	writer, err := os.Create(excelFilePath)
 	if err != nil {
-		log.Fatalf("%v: %v\n", csvFilePath, err)
+		log.Fatalf("%v: %v\n", excelFilePath, err)
 	}
 
 	matrix := matrixFromImage(img)
-	saveAsCSV(matrix, writer)
+	saveAsExcel(matrix, writer)
 }
 
-func saveAsCSV(matrix [][]uint32, writer *os.File) {
-	w := csv.NewWriter(writer)
-
-	// strMatrix is also transposed
-	strMatrix := make([][]string, len(matrix[0]))
-	for i := 0; i < len(matrix[0]); i++ {
-		strMatrix[i] = make([]string, len(matrix))
-		for j := 0; j < len(matrix); j++ {
-			strMatrix[i][j] = strconv.Itoa(int(matrix[j][i]))
+func saveAsExcel(matrix [][]uint32, writer *os.File) {
+	f := excelize.NewFile()
+	for x, col := range matrix {
+		for y, val := range col {
+			coords := excelIndex(x, y)
+			err := f.SetCellInt("Sheet1", coords, int(val))
+			if err != nil {
+				log.Fatalf("setting %s to be %d: %v", coords, val, err)
+			}
 		}
 	}
 
-	err := w.WriteAll(strMatrix)
+	err := f.Write(writer)
 	if err != nil {
-		log.Fatalf("saveAsCSV: %v\n", err)
+		log.Fatalf("writing to excel writer file: %v", err)
 	}
 }
 
