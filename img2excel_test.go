@@ -15,6 +15,7 @@ func TestExcelIndex(t *testing.T) {
 		{26, 13, "AA14"},
 		{26 + 25, 0, "AZ1"},
 		{26 + 3, 0, "AD1"},
+		{751, 0, "ABX1"},
 	}
 	for _, c := range cases {
 		got := excelIndex(c.inX, c.inY)
