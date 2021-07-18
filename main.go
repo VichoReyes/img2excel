@@ -56,14 +56,25 @@ func main() {
 }
 
 func saveAsExcel(matrix [][]uint32, writer *os.File) {
+	const sheet = "Sheet1"
 	f := excelize.NewFile()
 	for x, col := range matrix {
 		for y, val := range col {
 			coords := excelIndex(x, y)
-			err := f.SetCellInt("Sheet1", coords, int(val))
+			err := f.SetCellInt(sheet, coords, int(val))
 			if err != nil {
 				log.Fatalf("setting %s to be %d: %v", coords, val, err)
 			}
+		}
+	}
+
+	maxColors := []string{"#FF0000", "#00FF00", "#0000FF"}
+	for y := 0; y < len(matrix[0]); y++ {
+		excelRow := excelIndex(0, y) + ":" + excelIndex(len(matrix), y)
+		err := f.SetConditionalFormat(sheet, excelRow,
+			`[{"type":"2_color_scale","criteria":"=","min_type":"min","max_type":"max","min_color":"#000000","max_color":"`+maxColors[y%3]+`"}]`)
+		if err != nil {
+			log.Fatalf("SetConditionalFormat: %v", err)
 		}
 	}
 
