@@ -3,29 +3,32 @@
 	<head>
 		<meta charset="utf-8"/>
 		<title>WebAssembly</title>
-		<script src="wasm_exec.js"></script>
-		<script>
-			const go = new Go();
-			WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then((result) => {
-				async function loadImage() {
-					if (this.files) {
-						const ab = await this.files[0].arrayBuffer();
-						await go.run(result.instance);
-					}
-				}
-				const inputElement = document.getElementById("input");
-				inputElement.addEventListener("change", loadImage, false);
-				document.querySelector(".loading").remove();
-			});
-		</script>
 	</head>
 	<body>
 		<label>
 			Select an image from your computer:
 			<input type="file" id="file" accept="image/*" />
 		</label>
-		<p class="loading">
+		<p id="loading">
 			Loading...
 		</p>
+		<p id="output">output will go here</p>
+
+		<script src="wasm_exec.js"></script>
+		<script>
+			const go = new Go();
+			WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then((result) => {
+				go.run(result.instance);
+				async function loadImage() {
+					if (this.files) {
+						const ab = await this.files[0].arrayBuffer();
+					}
+				}
+				const inputElement = document.getElementById("file");
+				inputElement.addEventListener("change", loadImage, false);
+				document.querySelector("#loading").style = "opacity: 0";
+			});
+		</script>
+
 	</body>
 </html>
