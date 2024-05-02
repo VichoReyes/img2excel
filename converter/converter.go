@@ -1,12 +1,13 @@
-package main
+package converter
 
 import (
-	"github.com/360EntSecGroup-Skylar/excelize/v2"
 	"image"
 	"image/png"
 	"log"
 	"os"
 	"strconv"
+
+	"github.com/360EntSecGroup-Skylar/excelize/v2"
 )
 
 const LettersInAlphabet = 26

@@ -1,3 +1,6 @@
 *.png
 *.xlsx
 *.csv
+main.wasm
+wasm_exec.js
+server-bin
