@@ -36,5 +36,9 @@ func convertToExcel(this js.Value, p []js.Value) any {
 		fmt.Printf("convertToExcel converter: %v\n", err)
 		return nil
 	}
-	return nil
+	// create UInt8Array from dest.Bytes()
+	jsExcelBytes := js.Global().Get("Uint8Array").New(len(dest.Bytes()))
+	js.CopyBytesToJS(jsExcelBytes, dest.Bytes())
+	fmt.Println("convertToExcel: conversion successful")
+	return jsExcelBytes
 }
