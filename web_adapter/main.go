@@ -12,7 +12,7 @@ func main() {
 	keepAlive := make(chan bool)
 	convertToExcel := js.FuncOf(convertToExcel)
 	js.Global().Set("convertToExcel", convertToExcel)
-	fmt.Println("WebAssembly initialized") // not printing for some reason
+	fmt.Println("WebAssembly initialized")
 	<-keepAlive
 }
 
