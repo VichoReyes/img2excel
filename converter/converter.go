@@ -2,9 +2,8 @@ package converter
 
 import (
 	"image"
-	"image/png"
+	"io"
 	"log"
-	"os"
 	"strconv"
 
 	"github.com/360EntSecGroup-Skylar/excelize/v2"
@@ -32,31 +31,19 @@ func excelIndex(x, y int) string {
 	return colIndex + rowIndex
 }
 
-func main() {
-	if len(os.Args) != 3 {
-		log.Fatalln("USAGE: img2excel <inputFile.png> <outputFile.xlsx>")
-	}
-	imgFilePath := os.Args[1]
-	imageReader, err := os.Open(imgFilePath)
+func Convert(imageReader io.Reader, excelWriter io.Writer) error {
+	img, formatName, err := image.Decode(imageReader)
 	if err != nil {
-		log.Fatalf("%v: %v\n", imgFilePath, err)
+		return err
 	}
-	img, err := png.Decode(imageReader)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	excelFilePath := os.Args[2]
-	writer, err := os.Create(excelFilePath)
-	if err != nil {
-		log.Fatalf("%v: %v\n", excelFilePath, err)
-	}
+	log.Printf("Decoded image format: %s", formatName)
 
 	matrix := matrixFromImage(img)
-	saveAsExcel(matrix, writer)
+	saveAsExcel(matrix, excelWriter)
+	return nil
 }
 
-func saveAsExcel(matrix [][]uint32, writer *os.File) {
+func saveAsExcel(matrix [][]uint32, writer io.Writer) {
 	const sheet = "Sheet1"
 	f := excelize.NewFile()
 	for x, col := range matrix {
