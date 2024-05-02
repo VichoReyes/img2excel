@@ -3,7 +3,7 @@ GO := go
 
 # Output file names
 WASM_OUTPUT := main.wasm
-SERVER_OUTPUT := server-bin
+SERVER_OUTPUT := serve
 WASM_EXEC_OUTPUT := wasm_exec.js
 
 # Build target
@@ -11,7 +11,7 @@ build: build-server get-wasm-script
 	GOOS=js GOARCH=wasm $(GO) build -o $(WASM_OUTPUT) ./web_adapter/main.go
 
 # Build server target
-build-server:
+build-server server/main.go:
 	$(GO) build -o $(SERVER_OUTPUT) ./server/main.go
 
 # Build wasm_exec.js target
