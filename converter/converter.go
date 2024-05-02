@@ -2,6 +2,8 @@ package converter
 
 import (
 	"image"
+	_ "image/jpeg"
+	_ "image/png"
 	"io"
 	"log"
 	"strconv"
