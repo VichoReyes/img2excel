@@ -22,6 +22,8 @@
 				async function loadImage() {
 					if (this.files) {
 						const ab = await this.files[0].arrayBuffer();
+						const excel = convertToExcel(new Uint8Array(ab));
+						console.log("generated excel?", typeof(excel));
 					}
 				}
 				const inputElement = document.getElementById("file");
