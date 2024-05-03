@@ -12,7 +12,6 @@ import (
 )
 
 const LettersInAlphabet = 26
-const maxImageWidth = 120
 
 // Converts zero-indexed coordinates to letter-and-number excel ones
 func excelIndex(x, y int) string {
@@ -42,7 +41,7 @@ func Convert(imageReader io.Reader, excelWriter io.Writer) error {
 	log.Printf("Decoded image format: %s", formatName)
 
 	bigPxMatrix := matrixFromImage(img)
-	smallerPxMatrix := limitWidth(bigPxMatrix)
+	smallerPxMatrix := limitWidth(bigPxMatrix, 120)
 	numberMatrix := spreadY(smallerPxMatrix)
 	saveAsExcel(numberMatrix, excelWriter)
 	return nil
@@ -113,7 +112,7 @@ func spreadY(imgMatrix [][][3]uint8) [][]uint8 {
 }
 
 // makes matrix maxImageWidth pixels wide at most
-func limitWidth(matrix [][][3]uint8) [][][3]uint8 {
+func limitWidth(matrix [][][3]uint8, maxImageWidth int) [][][3]uint8 {
 	// round up of len(matrix) / maxImageWidth
 	stride := (len(matrix) + maxImageWidth - 1) / maxImageWidth
 
