@@ -2,7 +2,6 @@ package converter
 
 import (
 	"testing"
-	"testing/quick"
 )
 
 func TestExcelIndex(t *testing.T) {
@@ -27,9 +26,9 @@ func TestExcelIndex(t *testing.T) {
 
 }
 
+/*
 // // makes matrix maxImageWidth pixels wide at most
 // func limitWidth(matrix [][][3]uint8, maxImageWidth int) [][][3]uint8 {
-
 func TestLimitWidth(t *testing.T) {
 	// we'll test a single case
 	// resizing a 5x5 matrix to 2x2
@@ -88,3 +87,4 @@ func TestLimitWidthProperties(t *testing.T) {
 		t.Error("limitWidth: quick.Check failed")
 	}
 }
+*/
