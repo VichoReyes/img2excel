@@ -41,7 +41,7 @@ func Convert(imageReader io.Reader, excelWriter io.Writer) error {
 	log.Printf("Decoded image format: %s", formatName)
 
 	bigPxMatrix := matrixFromImage(img)
-	smallerPxMatrix := limitWidth(bigPxMatrix, 120)
+	smallerPxMatrix := limitWidth(bigPxMatrix, 80)
 	numberMatrix := spreadY(smallerPxMatrix)
 	saveAsExcel(numberMatrix, excelWriter)
 	return nil
