@@ -85,7 +85,7 @@ func matrixFromImage(image image.Image) [][][3]uint8 {
 	}
 	for x, column := range matrix {
 		for y := 0; y < len(column); y++ {
-			pixelColor := image.At(x, y/3)
+			pixelColor := image.At(x, y)
 			r, g, b, _ := pixelColor.RGBA()
 			column[y][0] = uint8(r / 0xff)
 			column[y][1] = uint8(g / 0xff)
