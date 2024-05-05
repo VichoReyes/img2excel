@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>WebAssembly</title>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+	</head>
+	<body>
+		<label>
+			Select an image from your computer:
+			<input type="file" id="file" accept="image/*" />
+		</label>
+		<p id="loading">
+			Loading...
+		</p>
+		<button id="download" style="display: none;">Download</button>
+
+		<script src="wasm_exec.js"></script>
+		<script>
+			function downloadFile(blob, filename) {
+				const url = URL.createObjectURL(blob);
+				const a = document.createElement("a");
+				a.href = url;
+				a.download = filename;
+				document.body.appendChild(a);
+				a.click();
+				URL.revokeObjectURL(url);
+				document.body.removeChild(a);
+			}
+			async function loadImage() {
+				const input = document.querySelector("#file");
+				if (input.files) {
+					const ab = await input.files[0].arrayBuffer();
+					const excel = convertToExcel(new Uint8Array(ab));
+					const blob = new Blob([excel], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+					downloadFile(blob, "output.xlsx");
+				} else {
+					alert("Please select a file.");
+				}
+			}
+			const go = new Go();
+			WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then((result) => {
+				go.run(result.instance);
+				document.querySelector("#loading").style = "display: none";
+				document.querySelector("#download").style = "display: block";
+			});
+			document.querySelector("#download").addEventListener("click", loadImage);
+		</script>
+
+	</body>
+</html>
