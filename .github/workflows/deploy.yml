@@ -22,7 +22,9 @@ jobs:
         run: make
 
       - name: Copy files to page
-        run: cp index.html wasm_exec.js main.wasm ./public
+        run: |
+          mkdir public
+          cp index.html wasm_exec.js main.wasm ./public
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
